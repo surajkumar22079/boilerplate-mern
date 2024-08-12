@@ -8,8 +8,8 @@ import {
 } from '../types';
 
 import TaskRepository from './store/task-repository';
-import ShareTaskRequestRepository from '../../share-task-request/internal/store/share-task-request-repository';
 import TaskUtil from './task-util';
+import ShareTaskRequestReader from '../../share-task-request/internal/share-task-request-reader';
 
 export default class TaskReader {
   public static async getTaskForAccount(params: GetTaskParams): Promise<Task> {
@@ -55,14 +55,8 @@ export default class TaskReader {
 
 
   public static async getSharedTasksForAccount(params: GetAllTaskParams): Promise<Task []> {
-    const sharedTasks = await ShareTaskRequestRepository.find({
-      account: params.accountId,
-      active: true,
-    });
-    
-    const taskIds = sharedTasks.map((item) => item.task);
-
-// console.log(sharedTasks);
+    const taskIds = await ShareTaskRequestReader.getSharedTaskIDsForAccount(params.accountId);
+     
     const totalTasksCount = await TaskRepository.countDocuments({
       account: params.accountId,
       active: true,
@@ -81,3 +75,4 @@ export default class TaskReader {
     return tasksDb.map((taskDb) => TaskUtil.convertTaskDBToTask(taskDb));
   } 
 }
+

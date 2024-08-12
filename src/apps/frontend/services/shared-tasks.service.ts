@@ -1,6 +1,5 @@
 import { AccessToken, ApiResponse, ApiError } from '../types';
-import APIService from './api.service';
-// import { SharedTask } from '../types/shared-task';
+import APIService from './api.service'; 
 import { Task } from '../types/task';
 
 export default class SharedTaskService extends APIService {
@@ -31,13 +30,17 @@ export default class SharedTaskService extends APIService {
     const userAccessToken = JSON.parse(
       localStorage.getItem('access-token'),
     ) as AccessToken;
-    const accountId = userAccessToken.accountId;
+    // const accountId = userAccessToken.accountId;
     try {
-      const response = await this.apiClient.get(`/tasks/shared/${accountId}`, {
+      const response = await this.apiClient.get(`/tasks`, {
         headers: {
           Authorization: `Bearer ${userAccessToken.token}`,
         },
+        params:{
+          sharedTask: 'true'
+        }
       }); 
+      console.log(response);
       const sharedTasks: Task[] = response.data.map(
         (taskData: any) => new Task(taskData),
       );

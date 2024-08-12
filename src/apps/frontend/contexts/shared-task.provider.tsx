@@ -4,8 +4,7 @@ import React, {
     useContext,
     useState,
   } from 'react';
-  import { AsyncError, AsyncResult } from '../types';
-  // import { SharedTask } from '../types/shared-task';
+  import { AsyncError, AsyncResult } from '../types'; 
   import SharedTaskService from '../services/shared-tasks.service';
   import useAsync from './async.hook';
 import { Task } from '../types/task';
@@ -67,3 +66,4 @@ import { Task } from '../types/task';
       </SharedTaskContext.Provider>
     );
   };
+  

@@ -1,14 +1,13 @@
 import { Account } from '../account';
 import { ApplicationError } from '../application';
-import { HttpStatusCodes } from '../http';
-// import { Task } from '../task';
+import { HttpStatusCodes } from '../http'; 
 
 
 export class Comment {
     id: string;
     task: string;
     account: string | Account;
-    comment: String;
+    comment: string;
     createdAt: Date;
     updatedAt: Date;
   
@@ -16,7 +15,7 @@ export class Comment {
       id: string,
       task: string,
       account: string | Account,
-      comment: String,
+      comment: string,
       createdAt: Date,
       updatedAt: Date,
     ) {
@@ -30,9 +29,9 @@ export class Comment {
   }
 
 export interface CreateCommentParams {
-    taskId: String;
-    accountId:String;
-    comment: String;
+    taskId: string;
+    accountId:string;
+    comment: string;
 }
 
 export interface UpdateCommentParams{
@@ -42,14 +41,14 @@ export interface UpdateCommentParams{
     comment: string;
 }
 
-export interface     DeleteCommentParams{
-    commentId: String;
-    accountId:String;
+export interface DeleteCommentParams{
+    commentId: string;
+    accountId:string;
 }
 
 export interface GetCommentParams{
-    accountId:String;
-    commentId:String;
+    accountId:string;
+    commentId:string;
 }
 
 

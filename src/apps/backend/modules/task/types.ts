@@ -5,8 +5,7 @@ export class Task {
   id: string;
   account: string;
   description: string;
-  title: string;
-  sharedTask?: boolean;
+  title: string; 
 }
 
 export type GetAllTaskParams = {

@@ -64,39 +64,27 @@ export class TaskController {
   ) => {
     const page = +req.query.page;
     const size = +req.query.size;
+    
+    // Convert sharedTask to a boolean
+    const sharedTask = req.query.sharedTask === 'true';
+  
     const params: GetAllTaskParams = {
       accountId: req.accountId,
       page,
       size,
+      sharedTask, // Now sharedTask is correctly typed as a boolean
     };
+    let tasks: any[];
+    if(sharedTask===false)
+     tasks = await TaskService.getTasksForAccount(params);
 
-    const tasks = await TaskService.getTasksForAccount(params);
+    else tasks = await TaskService.getSharedTasksForAccount(params);
     const tasksJSON = tasks.map((task) => serializeTaskAsJSON(task));
-
+  
     res
       .status(HttpStatusCodes.OK)
       .send(tasksJSON);
-  });
-  getSharedTasks = applicationController(async (
-    req: Request,
-    res: Response,
-  ) => {
-    const page = +req.query.page;
-    const size = +req.query.size;
-    const params: GetAllTaskParams = {
-      accountId: req.accountId,
-      page,
-      size,
-    };
-
-    const tasks = await TaskService.getSharedTasksForAccount(params);
-    const tasksJSON = tasks.map((task) => serializeTaskAsJSON(task));
-
-    res
-      .status(HttpStatusCodes.OK)
-      .send(tasksJSON);
-  });
-
+  }); 
   updateTask = applicationController(async (
     req: Request<UpdateTaskParams>,
     res: Response,
@@ -117,3 +105,4 @@ export class TaskController {
   
 
 }
+

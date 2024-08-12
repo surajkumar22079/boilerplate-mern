@@ -8,3 +8,4 @@ const ShareTaskRequestRepository = ApplicationRepository<ShareTaskRequestDB>(
 );
 
 export default ShareTaskRequestRepository;
+

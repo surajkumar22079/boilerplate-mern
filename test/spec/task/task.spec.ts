@@ -15,7 +15,6 @@ describe('Task API', () => {
   beforeEach(async () => {
     ({ account, accessToken } = await createAccount());
   });
-
   describe('GET /tasks', () => {
     it('should be able to return list of tasks created by the account', async () => {
       await TaskService.createTask({

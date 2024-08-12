@@ -10,12 +10,12 @@ export default class ShareTaskRequestUtil {
   ): ShareTaskRequest {
     return {
       id: shareTaskRequestDb._id.toString(),
-      task: this.convertTask(shareTaskRequestDb.task),
-      account: this.convertAccount(shareTaskRequestDb.account),
+      task: this.convertTaskDbToTask(shareTaskRequestDb.task),
+      account: this.convertAccountDbToAccount(shareTaskRequestDb.account),
     } as ShareTaskRequest;
   }
 
-  private static convertTask(task: Types.ObjectId | Task): string | Task {
+  private static convertTaskDbToTask(task: Types.ObjectId | Task): string | Task {
     return Types.ObjectId.isValid(task.toString())
       ? task.toString()
       : {
@@ -26,7 +26,7 @@ export default class ShareTaskRequestUtil {
         };
   }
 
-  private static convertAccount(account: Types.ObjectId | Account): string | Account {
+  private static convertAccountDbToAccount(account: Types.ObjectId | Account): string | Account {
     return Types.ObjectId.isValid(account.toString())
       ? account.toString()
       : {

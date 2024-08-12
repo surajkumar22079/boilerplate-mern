@@ -5,7 +5,7 @@ import {
     ShareTaskRequestNotFoundError,
   } from '../types';
   import ShareTaskRequestRepository from './store/share-task-request-repository';
-  import ShareTaskRequestUtil from './share-task-request-util';
+  import ShareTaskRequestUtil from './share-task-request-util'; 
   
   export default class ShareTaskRequestReader {
     public static async getSharedTaskRequestForAccount(
@@ -42,4 +42,17 @@ import {
         ShareTaskRequestUtil.convertShareTaskDBRequestToShareTaskRequest(shareTaskRequestDb),
         );
     }
+
+    public static async getSharedTaskIDsForAccount(accountId:string) : Promise<string[]>{
+      const sharedTasks = await ShareTaskRequestRepository.find({
+        account: accountId,
+        active: true,
+        status:"approved",
+      });
+      
+      const taskIdsDB = sharedTasks.map((item) => item.task.toString());
+
+      return taskIdsDB;
+    }
   }
+  
