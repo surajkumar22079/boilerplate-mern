@@ -9,6 +9,8 @@ import {
   GetAccountParams,
   PhoneNumber,
   UpdateAccountDetailsParams,
+  DeleteAccountParams,
+  GetAllAccountsParams
 } from './types';
 
 export default class AccountService {
@@ -103,7 +105,7 @@ export default class AccountService {
   ): Promise<Account[]> {
     return AccountReader.getAllAccounts(params);
   }
-} 
+ 
 
   public static async deleteAccountById(
     params: DeleteAccountParams,

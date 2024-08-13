@@ -73,8 +73,7 @@ export type UpdateAccountParams = UpdateAccountDetailsParams | ResetPasswordPara
  
 export type GetAllAccountsParams = {
   search: string;
-};
-=======
+}; 
 export type DeleteAccountParams = GetAccountParams;
  
 

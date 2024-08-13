@@ -7,11 +7,8 @@ import { SharedTaskProvider } from '../contexts/shared-task.provider';
 import { Dashboard, NotFound, Tasks } from '../pages';
 import SharedTasks from '../pages/shared-tasks';
  
-import {
-  Dashboard,
-  NotFound,
-  ProfileSettings,
-  Tasks,
+import { 
+  ProfileSettings, 
 } from '../pages'; 
 import AppLayout from '../pages/app-layout/app-layout';
 import { CommentProvider } from '../contexts/comment.provider';

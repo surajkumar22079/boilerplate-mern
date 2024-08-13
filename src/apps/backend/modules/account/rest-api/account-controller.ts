@@ -109,9 +109,7 @@ export class AccountController {
 
       res.status(HttpStatusCodes.OK).send(accountsJSON);
     },
-  );
-}
- 
+  ); 
   deleteAccount = applicationController(
     async (req: Request<DeleteAccountParams>, res: Response) => {
       const { accountId } = req.params as DeleteAccountParams;

@@ -1,4 +1,4 @@
-import { ApiError, ApiResponse } from '../types';
+import { AccessToken, ApiError, ApiResponse } from '../types';
 import { JsonObject } from '../types/common-types';
 import { Task } from '../types/task';
 import { getAccessTokenFromStorage } from '../utils/storage-util';

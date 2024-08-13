@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types';
+import { AccessToken, ApiResponse } from '../types';
 import { Account } from '../types/account';
 import { getAccessTokenFromStorage } from '../utils/storage-util';
 
@@ -34,10 +34,7 @@ export default class AccountService extends APIService {
       (accountData: any) => new Account(accountData),
     );
     return new ApiResponse(accounts, undefined);
-  };
-}
-=======
-
+  }; 
   deleteAccount = async (): Promise<ApiResponse<void>> => {
     const userAccessToken = getAccessTokenFromStorage();
 
