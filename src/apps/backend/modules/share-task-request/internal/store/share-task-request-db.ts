@@ -24,8 +24,7 @@ export const ShareTaskRequestDbSchema: Schema = new Schema<ShareTaskRequestDB>(
     },
     status: {
       type: String,
-      enum: Object.values(ShareTaskRequestStatus),
-      default: ShareTaskRequestStatus.Approved,
+      enum: Object.values(ShareTaskRequestStatus), 
       required: true,
     },
   },

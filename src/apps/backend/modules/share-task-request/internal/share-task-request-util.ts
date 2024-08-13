@@ -1,8 +1,5 @@
 import { ShareTaskRequest } from '../types';
-import { ShareTaskRequestDB } from './store/share-task-request-db';
-import { Task } from '../../task/types';
-import { Account } from '../../account/types';
-import { Types } from 'mongoose';
+import { ShareTaskRequestDB } from './store/share-task-request-db'; 
 
 export default class ShareTaskRequestUtil {
   public static convertShareTaskDBRequestToShareTaskRequest(
@@ -10,32 +7,8 @@ export default class ShareTaskRequestUtil {
   ): ShareTaskRequest {
     return {
       id: shareTaskRequestDb._id.toString(),
-      task: this.convertTaskDbToTask(shareTaskRequestDb.task),
-      account: this.convertAccountDbToAccount(shareTaskRequestDb.account),
+      task:  shareTaskRequestDb.task.toString(),
+      account: shareTaskRequestDb.account.toString(),
     } as ShareTaskRequest;
-  }
-
-  private static convertTaskDbToTask(task: Types.ObjectId | Task): string | Task {
-    return Types.ObjectId.isValid(task.toString())
-      ? task.toString()
-      : {
-          id: (task as Task).id,
-          account: (task as Task).account,
-          description: (task as Task).description,
-          title: (task as Task).title,
-        };
-  }
-
-  private static convertAccountDbToAccount(account: Types.ObjectId | Account): string | Account {
-    return Types.ObjectId.isValid(account.toString())
-      ? account.toString()
-      : {
-          id: (account as Account).id,
-          firstName: (account as Account).firstName,
-          lastName: (account as Account).lastName,
-          username: (account as Account).username,
-          hashedPassword: (account as Account).hashedPassword,
-          phoneNumber: (account as Account).phoneNumber,
-        };
   }
 }
