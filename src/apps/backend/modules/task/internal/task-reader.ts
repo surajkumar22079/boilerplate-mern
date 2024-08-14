@@ -64,24 +64,35 @@ export default class TaskReader {
     const taskIds = await ShareTaskRequestReader.getSharedTaskIDsForAccount(
       params.accountId,
     );
-
+    
+    // If no task IDs are found, return an empty array
+    if (taskIds.length === 0) {
+      return [];
+    }
+  
     const totalTasksCount = await TaskRepository.countDocuments({
       account: params.accountId,
       active: true,
     });
-
+  
     const paginationParams: PaginationParams = {
       page: params.page ? params.page : 1,
       size: params.size ? params.size : totalTasksCount,
     };
     const startIndex = (paginationParams.page - 1) * paginationParams.size;
-
+  
     const tasksDb = await TaskRepository.find({
       _id: { $in: taskIds },
       active: true,
     })
       .limit(paginationParams.size)
       .skip(startIndex);
+     
+    if (tasksDb.length === 0) {
+      return [];
+    }
+  
     return tasksDb.map((taskDb) => TaskUtil.convertTaskDBToTask(taskDb));
   }
+  
 }

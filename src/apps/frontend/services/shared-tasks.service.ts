@@ -19,7 +19,7 @@ export default class SharedTaskService extends APIService {
             Authorization: `Bearer ${userAccessToken.token}`,
           },
         },
-      );
+      );  
       return new ApiResponse(undefined, undefined);
     } catch (e) {
       return new ApiResponse(undefined, new ApiError(e.response.data));
@@ -29,8 +29,7 @@ export default class SharedTaskService extends APIService {
   async getSharedTasks(): Promise<ApiResponse<Task[]>> {
     const userAccessToken = JSON.parse(
       localStorage.getItem('access-token'),
-    ) as AccessToken;
-    // const accountId = userAccessToken.accountId;
+    ) as AccessToken; 
     try {
       const response = await this.apiClient.get(`/tasks`, {
         headers: {
@@ -40,7 +39,7 @@ export default class SharedTaskService extends APIService {
           sharedTask: 'true'
         }
       }); 
-      console.log(response);
+      console.log(response); 
       const sharedTasks: Task[] = response.data.map(
         (taskData: any) => new Task(taskData),
       );

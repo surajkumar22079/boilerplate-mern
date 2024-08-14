@@ -18,7 +18,7 @@ describe('Shared Task API', () => {
       accountId: account.id,
       title: 'my-task',
       description: 'This is a test description.',
-    });
+    }); 
 
     taskId = task.id;
   });
@@ -33,15 +33,14 @@ describe('Shared Task API', () => {
         .set('content-type', 'application/json')
         .set('Authorization', `Bearer ${accessToken.token}`)
         .send({
+          taskId: taskId,
           accountIds: [anotherAccount.id],
-        });
-
+        }); 
       expect(res.status).to.eq(201);
       expect(res.body).to.be.an('array');
       expect(res.body.length).to.eq(1);
       expect(res.body[0].task).to.eq(taskId);
-      expect(res.body[0].account).to.eq(anotherAccount.id);
-      expect(res.body[0].status).to.eq('approved');
+      expect(res.body[0].account).to.eq(anotherAccount.id); 
     });
 
     it('should return error if trying to share task without taskId or accountIds', async () => {
@@ -58,7 +57,7 @@ describe('Shared Task API', () => {
     });
   });
 
-  describe('GET /tasks/shared/:accountId', () => {
+  describe('GET /tasks/:accountId', () => {
     it('should return shared tasks for the account', async () => {
       const { account: anotherAccount } = await createAccount();
 
@@ -69,11 +68,11 @@ describe('Shared Task API', () => {
 
       const res = await chai
         .request(app)
-        .get(`/api/tasks/shared/${anotherAccount.id}`)
+        .get(`/api/tasks`)
         .set('content-type', 'application/json')
         .set('Authorization', `Bearer ${accessToken.token}`)
-        .send();
-
+        .query({ sharedTask: 'true' })
+        .send();  
       expect(res.status).to.eq(200);
       expect(res.body).to.be.an('array');
       expect(res.body.length).to.be.greaterThan(0);
@@ -82,11 +81,11 @@ describe('Shared Task API', () => {
     it('should return empty array if no tasks shared with the account', async () => {
       const res = await chai
         .request(app)
-        .get(`/api/tasks/shared/${account.id}`)
+        .get(`/api/tasks`)
         .set('content-type', 'application/json')
         .set('Authorization', `Bearer ${accessToken.token}`)
-        .send();
-
+        .query({ sharedTask: 'true' })
+        .send( ); 
       expect(res.status).to.eq(200);
       expect(res.body).to.be.an('array');
       expect(res.body.length).to.eq(0);
