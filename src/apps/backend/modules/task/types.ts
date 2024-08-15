@@ -43,6 +43,12 @@ export type PaginationParams = {
   size: number;
 };
 
+export type FilterQuery = {
+  account: string;
+  active: boolean;
+  sharedTask?: boolean;
+}
+
 export enum TaskErrorCode {
   NOT_FOUND = 'TASK_ERR_01',
 }

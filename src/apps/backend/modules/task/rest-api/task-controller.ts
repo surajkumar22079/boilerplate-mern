@@ -21,7 +21,7 @@ export class TaskController {
         title: req.body.title,
       });
       const taskJSON = serializeTaskAsJSON(task);
-      
+
       res.status(HttpStatusCodes.CREATED).send(taskJSON);
     },
   );
@@ -66,16 +66,11 @@ export class TaskController {
     if (sharedTask === false) {
       tasks = await TaskService.getTasksForAccount(params);
     } else {
-      tasks = await TaskService.getSharedTasksForAccount(params); 
-    }
-    if(tasks.length === 0) {
-      res.status(HttpStatusCodes.OK).send([]);
+      tasks = await TaskService.getSharedTasksForAccount(params);
     }
 
-    else{
-      const tasksJSON = tasks.map((task) => serializeTaskAsJSON(task)); 
+    const tasksJSON = tasks.map((task) => serializeTaskAsJSON(task));
     res.status(HttpStatusCodes.OK).send(tasksJSON);
-    }
   });
   updateTask = applicationController(
     async (req: Request<UpdateTaskParams>, res: Response) => {

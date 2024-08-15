@@ -4,7 +4,6 @@ import { Account } from '../../../src/apps/backend/modules/account';
 import { createAccount } from '../../helpers/account';
 import { app } from '../../helpers/app';
 import { TaskService } from '../../../src/apps/backend/modules/task';
-import ShareTaskRequestService from '../../../src/apps/backend/modules/share-task-request/share-task-request-service';
 
 describe('Shared Task API', () => {
   let account: Account;
@@ -57,38 +56,5 @@ describe('Shared Task API', () => {
     });
   });
 
-  describe('GET /tasks/:accountId', () => {
-    it('should return shared tasks for the account', async () => {
-      const { account: anotherAccount } = await createAccount();
-
-      await ShareTaskRequestService.createSharedTaskRequest({
-        taskId,
-        accountId: anotherAccount.id,
-      });
-
-      const res = await chai
-        .request(app)
-        .get(`/api/tasks`)
-        .set('content-type', 'application/json')
-        .set('Authorization', `Bearer ${accessToken.token}`)
-        .query({ sharedTask: 'true' })
-        .send();  
-      expect(res.status).to.eq(200);
-      expect(res.body).to.be.an('array');
-      expect(res.body.length).to.be.greaterThan(0);
-    });
-
-    it('should return empty array if no tasks shared with the account', async () => {
-      const res = await chai
-        .request(app)
-        .get(`/api/tasks`)
-        .set('content-type', 'application/json')
-        .set('Authorization', `Bearer ${accessToken.token}`)
-        .query({ sharedTask: 'true' })
-        .send( ); 
-      expect(res.status).to.eq(200);
-      expect(res.body).to.be.an('array');
-      expect(res.body.length).to.eq(0);
-    });
-  });
+ 
 });

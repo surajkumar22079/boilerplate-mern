@@ -4,18 +4,13 @@ import {
   Task,
   TaskNotFoundError,
   PaginationParams,
+  FilterQuery,
 } from '../types';
 
 import TaskRepository from './store/task-repository';
 import TaskUtil from './task-util';
 import ShareTaskRequestReader from '../../share-task-request/internal/share-task-request-reader';
-
-
-interface TaskQuery {
-  account: string;
-  active: boolean;
-  sharedTask?: boolean;
-}
+ 
 
 export default class TaskReader {
   public static async getTaskForAccount(params: GetTaskParams): Promise<Task> {
@@ -34,7 +29,7 @@ export default class TaskReader {
   public static async getTasksForAccount(
     params: GetAllTaskParams,
   ): Promise<Task[]> {
-    const query: TaskQuery = {
+    const query: FilterQuery = {
       account: params.accountId,
       active: true,
     };
@@ -64,11 +59,7 @@ export default class TaskReader {
     const taskIds = await ShareTaskRequestReader.getSharedTaskIDsForAccount(
       params.accountId,
     );
-    
-    // If no task IDs are found, return an empty array
-    if (taskIds.length === 0) {
-      return [];
-    }
+     
   
     const totalTasksCount = await TaskRepository.countDocuments({
       account: params.accountId,
@@ -88,9 +79,6 @@ export default class TaskReader {
       .limit(paginationParams.size)
       .skip(startIndex);
      
-    if (tasksDb.length === 0) {
-      return [];
-    }
   
     return tasksDb.map((taskDb) => TaskUtil.convertTaskDBToTask(taskDb));
   }
