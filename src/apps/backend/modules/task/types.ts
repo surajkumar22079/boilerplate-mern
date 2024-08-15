@@ -5,13 +5,14 @@ export class Task {
   id: string;
   account: string;
   description: string;
-  title: string;
+  title: string; 
 }
 
 export type GetAllTaskParams = {
   accountId: string;
   page?: number;
   size?: number;
+  sharedTask?: boolean;
 };
 
 export type GetTaskParams = {
@@ -41,6 +42,12 @@ export type PaginationParams = {
   page: number;
   size: number;
 };
+
+export type FilterQuery = {
+  account: string;
+  active: boolean;
+  sharedTask?: boolean;
+}
 
 export enum TaskErrorCode {
   NOT_FOUND = 'TASK_ERR_01',

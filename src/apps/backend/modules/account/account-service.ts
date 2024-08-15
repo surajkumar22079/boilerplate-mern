@@ -9,6 +9,8 @@ import {
   GetAccountParams,
   PhoneNumber,
   UpdateAccountDetailsParams,
+  DeleteAccountParams,
+  GetAllAccountsParams
 } from './types';
 
 export default class AccountService {
@@ -97,5 +99,20 @@ export default class AccountService {
       firstName,
       lastName,
     );
+  } 
+  public static async getAllAccounts(
+    params: GetAllAccountsParams,
+  ): Promise<Account[]> {
+    return AccountReader.getAllAccounts(params);
   }
-}
+ 
+
+  public static async deleteAccountById(
+    params: DeleteAccountParams,
+  ): Promise<void> {
+    const { accountId } = params;
+    await AccountReader.getAccountById(accountId);
+
+    return AccountWriter.deleteAccountById(accountId);
+  }
+} 

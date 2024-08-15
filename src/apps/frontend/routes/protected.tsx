@@ -2,9 +2,16 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import routes from '../constants/routes';
-import { TaskProvider, useAccountContext } from '../contexts';
+import { TaskProvider, useAccountContext } from '../contexts'; 
+import { SharedTaskProvider } from '../contexts/shared-task.provider';
 import { Dashboard, NotFound, Tasks } from '../pages';
+import SharedTasks from '../pages/shared-tasks';
+ 
+import { 
+  ProfileSettings, 
+} from '../pages'; 
 import AppLayout from '../pages/app-layout/app-layout';
+import { CommentProvider } from '../contexts/comment.provider';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
@@ -30,10 +37,26 @@ export const protectedRoutes = [
       {
         path: routes.TASKS,
         element: (
-          <TaskProvider>
-            <Tasks />
-          </TaskProvider>
+          <CommentProvider>
+            <TaskProvider>
+              <Tasks />
+            </TaskProvider>
+          </CommentProvider>
         ),
+      },
+      {
+        path: routes.SHARED_TASKS,
+        element: (
+          <CommentProvider>
+            <SharedTaskProvider>
+              <SharedTasks />
+            </SharedTaskProvider>
+          </CommentProvider>
+        ),
+      },
+      {
+        path: routes.PROFILE_SETTINGS,
+        element: <ProfileSettings />,
       },
       { path: '*', element: <NotFound /> },
     ],

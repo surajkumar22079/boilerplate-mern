@@ -1,14 +1,14 @@
 import {
   CreateTaskParams,
-  DeleteTaskParams,
+  DeleteTaskParams, 
   Task,
   TaskNotFoundError,
   UpdateTaskParams,
-} from '../types';
+} from '../types'; 
 
 import TaskRepository from './store/task-repository';
 import TaskReader from './task-reader';
-import TaskUtil from './task-util';
+import TaskUtil from './task-util'; 
 
 export default class TaskWriter {
   public static async createTask(params: CreateTaskParams): Promise<Task> {
@@ -43,6 +43,8 @@ export default class TaskWriter {
 
     return TaskUtil.convertTaskDBToTask(task);
   }
+   
+
 
   public static async deleteTask(params: DeleteTaskParams): Promise<void> {
     const task = await TaskReader.getTaskForAccount({
@@ -62,3 +64,4 @@ export default class TaskWriter {
     );
   }
 }
+

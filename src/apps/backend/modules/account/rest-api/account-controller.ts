@@ -6,7 +6,9 @@ import {
   CreateAccountParams,
   CreateAccountParamsByPhoneNumber,
   CreateAccountParamsByUsernameAndPassword,
+  DeleteAccountParams,
   GetAccountParams,
+  GetAllAccountsParams,
   PhoneNumber,
   ResetPasswordParams,
   UpdateAccountDetailsParams,
@@ -92,4 +94,30 @@ export class AccountController {
       res.status(HttpStatusCodes.OK).send(accountJSON);
     },
   );
-}
+
+ 
+  getAllAccounts = applicationController(
+    async (req: Request, res: Response) => {
+      const search = req.query.search as string;
+      
+
+      const params: GetAllAccountsParams = { search };
+      const accounts = await AccountService.getAllAccounts(params);
+      const accountsJSON = accounts.map((account) =>
+        serializeAccountAsJSON(account),
+      );
+
+      res.status(HttpStatusCodes.OK).send(accountsJSON);
+    },
+  ); 
+  deleteAccount = applicationController(
+    async (req: Request<DeleteAccountParams>, res: Response) => {
+      const { accountId } = req.params as DeleteAccountParams;
+      await AccountService.deleteAccountById({
+        accountId,
+      });
+
+      res.status(HttpStatusCodes.NO_CONTENT).send();
+    },
+  );
+} 

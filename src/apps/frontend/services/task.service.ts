@@ -1,6 +1,7 @@
 import { AccessToken, ApiError, ApiResponse } from '../types';
 import { JsonObject } from '../types/common-types';
 import { Task } from '../types/task';
+import { getAccessTokenFromStorage } from '../utils/storage-util';
 
 import APIService from './api.service';
 
@@ -10,9 +11,7 @@ export default class TaskService extends APIService {
     description: string,
   ): Promise<ApiResponse<Task>> => {
     try {
-      const userAccessToken = JSON.parse(
-        localStorage.getItem('access-token'),
-      ) as AccessToken;
+      const userAccessToken = getAccessTokenFromStorage();
       const response = await this.apiClient.post(
         '/tasks', { title, description },
         {
@@ -29,9 +28,7 @@ export default class TaskService extends APIService {
 
   getTasks = async (): Promise<ApiResponse<Task[]>> => {
     try {
-      const userAccessToken = JSON.parse(
-        localStorage.getItem('access-token'),
-      ) as AccessToken;
+      const userAccessToken = getAccessTokenFromStorage();
       const response = await this.apiClient.get(
         '/tasks',
         {
@@ -47,14 +44,34 @@ export default class TaskService extends APIService {
     }
   };
 
+  shareTask = async (taskId: string, username: string): Promise<ApiResponse<Task>> => {
+    try {
+      const userAccessToken = JSON.parse(
+        localStorage.getItem('access-token'),
+      ) as AccessToken;
+      const response = await this.apiClient.post(
+        `/tasks/${taskId}`,
+        { username },
+        {
+          headers: {
+            Authorization: `Bearer ${userAccessToken.token}`,
+          },
+        },
+      );
+      const sharedTask = new Task(response.data as JsonObject);
+      return new ApiResponse(sharedTask, undefined);
+    } catch (e) {
+      return new ApiResponse(undefined, new ApiError(e.response.data as JsonObject));
+    }
+  };
+  
+
   updateTask = async (
     taskId: string,
     taskData: Task,
   ): Promise<ApiResponse<Task>> => {
     try {
-      const userAccessToken = JSON.parse(
-        localStorage.getItem('access-token'),
-      ) as AccessToken;
+      const userAccessToken = getAccessTokenFromStorage();
       const response = await this.apiClient.patch(
         `/tasks/${taskId}`, taskData,
         {
@@ -71,9 +88,7 @@ export default class TaskService extends APIService {
 
   deleteTask = async (taskId: string): Promise<ApiResponse<void>> => {
     try {
-      const userAccessToken = JSON.parse(
-        localStorage.getItem('access-token'),
-      ) as AccessToken;
+      const userAccessToken = getAccessTokenFromStorage();
       await this.apiClient.delete(`/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${userAccessToken.token}`,
@@ -84,4 +99,5 @@ export default class TaskService extends APIService {
       return new ApiResponse(undefined, new ApiError(e.response.data as JsonObject));
     }
   };
+  
 }

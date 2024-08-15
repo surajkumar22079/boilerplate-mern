@@ -7,15 +7,23 @@ import TaskRepository from '../../../src/apps/backend/modules/task/internal/stor
 import TaskService from '../../../src/apps/backend/modules/task/task-service';
 import { createAccount } from '../../helpers/account';
 import { app } from '../../helpers/app';
+import { ShareTaskRequestService } from '../../../dist/modules/share-task-request';
 
 describe('Task API', () => {
   let account: Account;
   let accessToken: AccessToken;
+  let taskId: string;
 
   beforeEach(async () => {
     ({ account, accessToken } = await createAccount());
-  });
+    const task = await TaskService.createTask({
+      accountId: account.id,
+      title: 'my-task',
+      description: 'This is a test description.',
+    }); 
 
+    taskId = task.id;
+  });
   describe('GET /tasks', () => {
     it('should be able to return list of tasks created by the account', async () => {
       await TaskService.createTask({
@@ -194,6 +202,41 @@ describe('Task API', () => {
 
       const updatedToken = await TaskRepository.findById(task.id);
       expect(updatedToken.active).to.be.false;
+    });
+  });
+
+  describe('GET /tasks/:accountId', () => {
+    it('should return shared tasks for the account', async () => {
+      const { account: anotherAccount } = await createAccount();
+
+      await ShareTaskRequestService.createSharedTaskRequest({
+        taskId,
+        accountId: anotherAccount.id,
+      });
+
+      const res = await chai
+        .request(app)
+        .get(`/api/tasks`)
+        .set('content-type', 'application/json')
+        .set('Authorization', `Bearer ${accessToken.token}`)
+        .query({ sharedTask: 'true' })
+        .send();  
+      expect(res.status).to.eq(200);
+      expect(res.body).to.be.an('array');
+      expect(res.body.length).to.be.greaterThan(0);
+    });
+
+    it('should return empty array if no tasks shared with the account', async () => {
+      const res = await chai
+        .request(app)
+        .get(`/api/tasks`)
+        .set('content-type', 'application/json')
+        .set('Authorization', `Bearer ${accessToken.token}`)
+        .query({ sharedTask: 'true' })
+        .send( ); 
+      expect(res.status).to.eq(200);
+      expect(res.body).to.be.an('array');
+      expect(res.body.length).to.eq(0);
     });
   });
 });
